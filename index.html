@@ -6,12 +6,12 @@
     <title>Kawaii Message</title>
     <meta
       name="description"
-      content="A glowing kawaii love message card asking 'Do you love me?' with a playful dodging No button and a heart-burst celebration."
+      content="A glowing kawaii love message card asking 'Are you in love with me?' with a playful dodging No button and a heart-burst celebration."
     />
     <meta property="og:title" content="Kawaii Message" />
     <meta
       property="og:description"
-      content="A glowing kawaii love message card asking 'Do you love me?' with a playful dodging No button and a heart-burst celebration."
+      content="A glowing kawaii love message card asking 'Are you in love with me?' with a playful dodging No button and a heart-burst celebration."
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -163,8 +163,58 @@
     <!-- Centered main stage -->
     <main class="stage">
       <section class="card" id="message-card" aria-live="polite">
-        <!-- Question state -->
-        <div id="question-view" class="view question-view">
+        <!-- Initial language selection view (shown at start) -->
+        <div id="language-view" class="view language-view">
+          <div class="card-emblem" aria-hidden="true">
+            <svg
+              class="emblem-heart"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M32 56.5C32 56.5 8 41.2 8 22.8C8 14.5 14.4 8.5 22 8.5C26.7 8.5 30.2 10.9 32 14.2C33.8 10.9 37.3 8.5 42 8.5C49.6 8.5 56 14.5 56 22.8C56 41.2 32 56.5 32 56.5Z"
+                fill="url(#startHeartGrad)"
+                stroke="#ffd6e8"
+                stroke-width="2.5"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient
+                  id="startHeartGrad"
+                  x1="12"
+                  y1="10"
+                  x2="52"
+                  y2="54"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#ff85b8" />
+                  <stop offset="55%" stop-color="#ff2e83" />
+                  <stop offset="100%" stop-color="#d91656" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <h1 id="language-start-heading" class="question-title language-start-title">
+            Choose your language
+          </h1>
+
+          <div class="start-lang-row" role="group" aria-labelledby="language-start-heading">
+            <button type="button" class="btn btn-start-lang" data-start-lang="fr">
+              Français
+            </button>
+            <button type="button" class="btn btn-start-lang" data-start-lang="en">
+              English
+            </button>
+            <button type="button" class="btn btn-start-lang" data-start-lang="de">
+              Deutsch
+            </button>
+          </div>
+        </div>
+
+        <!-- Question state (shown after language selection) -->
+        <div id="question-view" class="view question-view" hidden>
           <div class="card-emblem" aria-hidden="true">
             <svg
               class="emblem-heart"
@@ -196,7 +246,7 @@
             </svg>
           </div>
 
-          <h1 id="question-heading" class="question-title">Do you love me?</h1>
+          <h1 id="question-heading" class="question-title">Are you in love with me?</h1>
 
           <div class="button-row" id="button-row">
             <button type="button" id="yes-btn" class="btn btn-yes">Yes</button>
@@ -206,10 +256,11 @@
           </div>
         </div>
 
-        <!-- Celebration state (hidden until "Yes" is clicked) -->
+        <!-- Celebration / Answer state (hidden until "Yes" is clicked) -->
         <div id="celebration-view" class="view celebration-view" hidden>
           <div class="card-emblem celebration-emblem" aria-hidden="true">
             <svg
+              id="emblem-heart-answer"
               class="emblem-heart"
               viewBox="0 0 64 64"
               fill="none"
@@ -237,19 +288,98 @@
                 </linearGradient>
               </defs>
             </svg>
+
+            <svg
+              id="emblem-kiss-answer"
+              class="emblem-heart emblem-kiss"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              hidden
+            >
+              <path
+                d="M8 32C13.5 24 20.5 20.5 26 23.2C28.8 24.6 30.5 26.8 32 28.4C33.5 26.8 35.2 24.6 38 23.2C43.5 20.5 50.5 24 56 32C49.2 34.4 42.6 35.4 32 35.4C21.4 35.4 14.8 34.4 8 32Z"
+                fill="url(#kissUpperGrad)"
+                stroke="#ffe6f1"
+                stroke-width="2.2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.5 32.6C16.5 44.5 24.2 48.5 32 48.5C39.8 48.5 47.5 44.5 54.5 32.6C46.5 34.8 39.2 35.5 32 35.5C24.8 35.5 17.5 34.8 9.5 32.6Z"
+                fill="url(#kissLowerGrad)"
+                stroke="#ffe6f1"
+                stroke-width="2.2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M47 13.5C47 13.5 42 10.3 42 6.8C42 4.8 43.5 3.5 45.2 3.5C46.3 3.5 47.1 4.1 47.6 4.9C48.1 4.1 48.9 3.5 50 3.5C51.7 3.5 53.2 4.8 53.2 6.8C53.2 10.3 47 13.5 47 13.5Z"
+                fill="#ff85b8"
+                stroke="#ffe6f1"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient
+                  id="kissUpperGrad"
+                  x1="10"
+                  y1="22"
+                  x2="54"
+                  y2="36"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#ff9ec7" />
+                  <stop offset="50%" stop-color="#ff3b8d" />
+                  <stop offset="100%" stop-color="#e11d48" />
+                </linearGradient>
+                <linearGradient
+                  id="kissLowerGrad"
+                  x1="12"
+                  y1="33"
+                  x2="52"
+                  y2="49"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#ff4d97" />
+                  <stop offset="100%" stop-color="#be123c" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
 
           <h2 id="celebration-heading" class="celebration-title" tabindex="-1">
-            Ohhh! Really? I love you too Babe❤️
+            Ohhh! Really? Actually, I love you too ❤️
           </h2>
 
           <div class="celebration-actions">
+            <button
+              type="button"
+              id="next-btn"
+              class="btn btn-reset btn-next"
+              aria-label="Next question"
+              title="Next question"
+            >
+              <svg
+                class="next-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 5 7 7-7 7" />
+              </svg>
+            </button>
+
             <button
               type="button"
               id="reset-btn"
               class="btn btn-reset"
               aria-label="Start over"
               title="Start over"
+              hidden
             >
               <svg
                 class="reset-icon"

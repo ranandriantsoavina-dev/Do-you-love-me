@@ -5,6 +5,9 @@
      DOM References
      ------------------------------------------------------------------------ */
   const card = document.getElementById("message-card");
+  const languageView = document.getElementById("language-view");
+  const languageStartHeading = document.getElementById("language-start-heading");
+  const startLangButtons = document.querySelectorAll(".btn-start-lang");
   const questionView = document.getElementById("question-view");
   const celebrationView = document.getElementById("celebration-view");
   const questionHeading = document.getElementById("question-heading");
@@ -13,7 +16,10 @@
   const yesBtn = document.getElementById("yes-btn");
   const noBtn = document.getElementById("no-btn");
   const noSlot = document.getElementById("no-slot");
+  const nextBtn = document.getElementById("next-btn");
   const resetBtn = document.getElementById("reset-btn");
+  const emblemHeartAnswer = document.getElementById("emblem-heart-answer");
+  const emblemKissAnswer = document.getElementById("emblem-kiss-answer");
   const heartBurstLayer = document.getElementById("heart-burst");
   const settingsBtn = document.getElementById("settings-btn");
   const settingsPanel = document.getElementById("settings-panel");
@@ -29,10 +35,14 @@
 
   const TRANSLATIONS = {
     en: {
-      question: "Do you love me?",
+      chooseLanguage: "Choose your language",
+      question1: "Are you in love with me?",
+      answer1: "Ohhh! Really? Actually, I love you too ❤️",
+      nextLabel: "Next question",
+      question2: "Would you like to go out with me?",
+      answer2: "Now we are a couple, my love 😘",
       yes: "Yes",
       no: "No",
-      celebration: "Ohhh! Really? I love you too Babe❤️",
       resetLabel: "Start over",
       settingsLabel: "Settings",
       settingsTitle: "Settings",
@@ -40,10 +50,14 @@
       closeSettingsLabel: "Close settings",
     },
     fr: {
-      question: "Tu m'aimes ?",
+      chooseLanguage: "Choisis ta langue",
+      question1: "Es-tu amoureuse de moi ?",
+      answer1: "Ohhh ! Vraiment ? En fait, je t'aime aussi ❤️",
+      nextLabel: "Question suivante",
+      question2: "Voudrais-tu sortir avec moi ?",
+      answer2: "Maintenant nous sommes en couple, mon amour 😘",
       yes: "Oui",
       no: "Non",
-      celebration: "Ohhh ! Vraiment ? Je t'aime aussi Bébé❤️",
       resetLabel: "Recommencer",
       settingsLabel: "Paramètres",
       settingsTitle: "Paramètres",
@@ -51,10 +65,14 @@
       closeSettingsLabel: "Fermer les paramètres",
     },
     de: {
-      question: "Liebst du mich?",
+      chooseLanguage: "Wähle deine Sprache",
+      question1: "Bist du in mich verliebt?",
+      answer1: "Ohhh! Wirklich? Eigentlich liebe ich dich auch ❤️",
+      nextLabel: "Nächste Frage",
+      question2: "Möchtest du mit mir ausgehen?",
+      answer2: "Jetzt sind wir ein Paar, mein Schatz 😘",
       yes: "Ja",
       no: "Nein",
-      celebration: "Ohhh! Wirklich? Ich liebe dich auch Schatz❤️",
       resetLabel: "Neu starten",
       settingsLabel: "Einstellungen",
       settingsTitle: "Einstellungen",
@@ -71,6 +89,8 @@
   const DODGE_COOLDOWN_MS = 320;  // Matches smooth glide so movement isn't jittery
   const MAX_PICK_ATTEMPTS = 140;
 
+  let hasStarted = false;
+  let currentStep = 1;
   let isEscaped = false;
   let isCelebrated = false;
   let currentPos = { x: 0, y: 0 };
@@ -337,7 +357,7 @@
    * Smoothly moves the "No" button to a new safe viewport position.
    */
   function dodgeNoButton(force = false) {
-    if (isCelebrated) {
+    if (!hasStarted || isCelebrated) {
       return;
     }
 
@@ -417,7 +437,7 @@
 
   // Proximity detection: dodge as the cursor approaches the "No" button
   document.addEventListener("pointermove", (event) => {
-    if (isCelebrated || event.pointerType === "touch") {
+    if (!hasStarted || isCelebrated || event.pointerType === "touch") {
       return;
     }
 
@@ -464,7 +484,7 @@
   /**
    * Spawns a radial burst of glowing pink & red hearts centered on the card.
    */
-  function spawnHeartBurst() {
+  function spawnHeartBurst(mode = "heart") {
     heartBurstLayer.innerHTML = "";
 
     if (reducedMotionQuery.matches) {
@@ -476,7 +496,7 @@
     const originY = cardRect.top + cardRect.height / 2;
 
     const colors = ["#ff4d97", "#ff9ec7", "#e11d64", "#ff75b5", "#ffe0ef"];
-    const glyphs = ["❤", "♥", "♡"];
+    const glyphs = mode === "kiss" ? ["😘", "💋", "❤", "♥"] : ["❤", "♥", "♡"];
     const count = 28;
 
     for (let i = 0; i < count; i += 1) {
@@ -509,7 +529,25 @@
   }
 
   /**
-   * Switches from the question view to the glowing celebration message.
+   * Restores the "No" button back into its original card slot.
+   */
+  function resetNoButtonToSlot() {
+    isEscaped = false;
+    lastDodgeAt = 0;
+
+    noBtn.hidden = false;
+    noBtn.classList.remove("is-escaped");
+    noBtn.style.transform = "";
+    noBtn.style.width = "";
+    noBtn.style.height = "";
+    noBtn.style.transition = "";
+    noSlot.style.width = "";
+    noSlot.style.height = "";
+    noSlot.appendChild(noBtn);
+  }
+
+  /**
+   * Shows the answer screen for the current step (Answer 1 with right arrow, or Answer 2 with kiss + reset).
    */
   function handleYesClick() {
     if (isCelebrated) {
@@ -521,41 +559,101 @@
     noBtn.remove();
     questionView.hidden = true;
 
+    const copy = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+    const isFirstStep = currentStep === 1;
+
+    emblemHeartAnswer.hidden = !isFirstStep;
+    emblemKissAnswer.hidden = isFirstStep;
+    celebrationHeading.textContent = isFirstStep ? copy.answer1 : copy.answer2;
+    nextBtn.hidden = !isFirstStep;
+    resetBtn.hidden = isFirstStep;
+
     celebrationView.hidden = false;
     celebrationView.classList.remove("is-entering");
     void celebrationView.offsetWidth;
     celebrationView.classList.add("is-entering");
 
-    spawnHeartBurst();
+    spawnHeartBurst(isFirstStep ? "heart" : "kiss");
     celebrationHeading.focus({ preventScroll: true });
   }
 
   /**
-   * Resets the page back to the initial question state and restores the "No" button.
+   * Advances from Answer 1 to Question 2 when the right-arrow button is clicked.
+   */
+  function handleNextClick() {
+    if (!isCelebrated || currentStep !== 1) {
+      return;
+    }
+
+    currentStep = 2;
+    isCelebrated = false;
+
+    // Clear Answer 1 burst particles
+    heartBurstLayer.innerHTML = "";
+
+    // Restore "No" button back into its card slot for Question 2
+    resetNoButtonToSlot();
+
+    const copy = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+    questionHeading.textContent = copy.question2;
+
+    celebrationView.hidden = true;
+    celebrationView.classList.remove("is-entering");
+    questionView.hidden = false;
+    questionView.classList.remove("is-transitioning");
+    void questionView.offsetWidth;
+    questionView.classList.add("is-transitioning");
+
+    yesBtn.focus({ preventScroll: true });
+  }
+
+  /**
+   * Starts Question 1 directly after choosing a language on the start screen.
+   */
+  function startWithLanguage(lang) {
+    applyLanguage(lang);
+    hasStarted = true;
+    currentStep = 1;
+    isCelebrated = false;
+
+    resetNoButtonToSlot();
+
+    languageView.hidden = true;
+    celebrationView.hidden = true;
+    questionView.hidden = false;
+    questionView.classList.remove("is-transitioning");
+    void questionView.offsetWidth;
+    questionView.classList.add("is-transitioning");
+
+    yesBtn.focus({ preventScroll: true });
+  }
+
+  /**
+   * Resets the page directly back to Question 1 (never re-triggering the start language screen).
    */
   function handleResetClick() {
+    hasStarted = true;
+    currentStep = 1;
     isCelebrated = false;
-    isEscaped = false;
-    lastDodgeAt = 0;
 
     // Clear burst particles
     heartBurstLayer.innerHTML = "";
 
     // Restore "No" button back into its original card slot
-    noBtn.hidden = false;
-    noBtn.classList.remove("is-escaped");
-    noBtn.style.transform = "";
-    noBtn.style.width = "";
-    noBtn.style.height = "";
-    noBtn.style.transition = "";
-    noSlot.style.width = "";
-    noSlot.style.height = "";
-    noSlot.appendChild(noBtn);
+    resetNoButtonToSlot();
 
-    // Swap views
+    // Restore Question 1 copy in current language
+    const copy = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+    questionHeading.textContent = copy.question1;
+
+    // Swap views directly to Question 1
+    languageView.hidden = true;
     celebrationView.hidden = true;
     celebrationView.classList.remove("is-entering");
     questionView.hidden = false;
+    questionView.classList.remove("is-transitioning");
+    void questionView.offsetWidth;
+    questionView.classList.add("is-transitioning");
 
     yesBtn.focus({ preventScroll: true });
   }
@@ -573,11 +671,14 @@
     currentLang = safeLang;
 
     document.documentElement.lang = safeLang;
-    questionHeading.textContent = copy.question;
+    languageStartHeading.textContent = copy.chooseLanguage;
+    questionHeading.textContent = currentStep === 1 ? copy.question1 : copy.question2;
     yesBtn.textContent = copy.yes;
     noBtn.textContent = copy.no;
-    celebrationHeading.textContent = copy.celebration;
+    celebrationHeading.textContent = currentStep === 1 ? copy.answer1 : copy.answer2;
 
+    nextBtn.setAttribute("aria-label", copy.nextLabel);
+    nextBtn.setAttribute("title", copy.nextLabel);
     resetBtn.setAttribute("aria-label", copy.resetLabel);
     resetBtn.setAttribute("title", copy.resetLabel);
 
@@ -684,9 +785,19 @@
     }
   });
 
+  startLangButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const chosenLang = btn.getAttribute("data-start-lang");
+      if (chosenLang) {
+        startWithLanguage(chosenLang);
+      }
+    });
+  });
+
   yesBtn.addEventListener("click", handleYesClick);
+  nextBtn.addEventListener("click", handleNextClick);
   resetBtn.addEventListener("click", handleResetClick);
 
-  // Initialize saved language on load
+  // Initialize saved language preference while showing the start language chooser
   applyLanguage(loadSavedLanguage());
 })();
