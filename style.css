@@ -1,0 +1,719 @@
+/* ==========================================================================
+   Kawaii Message — Stylesheet
+   Pink & red glowing kawaii love theme on a deep dark-rose canvas
+   ========================================================================== */
+
+:root {
+  /* Deep dark rose background palette */
+  --bg-deep: #14050e;
+  --bg-mid: #28081b;
+  --bg-glow: #4a0e2e;
+
+  /* Card surface & border */
+  --card-bg: rgba(34, 8, 24, 0.82);
+  --card-border: rgba(255, 148, 194, 0.36);
+
+  /* Pink & red accents */
+  --pink-soft: #ffe5f1;
+  --pink-pastel: #ff9ec7;
+  --pink-hot: #ff3b8d;
+  --red-rose: #e11d64;
+  --red-deep: #9f0b3e;
+
+  /* Typography */
+  --font-display: "Fredoka", ui-rounded, "Hiragino Maru Gothic ProN", sans-serif;
+  --font-body: "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif;
+
+  /* Motion */
+  --ease-dodge: cubic-bezier(0.25, 0.85, 0.35, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  color: var(--pink-soft);
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(circle at 20% 18%, rgba(255, 59, 141, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 82% 78%, rgba(225, 29, 100, 0.24) 0%, transparent 48%),
+    radial-gradient(circle at 50% 48%, var(--bg-glow) 0%, var(--bg-mid) 52%, var(--bg-deep) 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Floating Background Hearts (CSS-only, subtle, behind content)
+   ========================================================================== */
+
+.bg-hearts {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-heart {
+  position: absolute;
+  bottom: -12vh;
+  font-size: var(--size, 1.4rem);
+  color: var(--color, rgba(255, 133, 184, 0.28));
+  text-shadow: 0 0 14px rgba(255, 59, 141, 0.45);
+  opacity: 0;
+  user-select: none;
+  will-change: transform, opacity;
+  animation: floatUp var(--dur, 14s) linear var(--delay, 0s) infinite;
+}
+
+.bg-heart.h1  { left: 5%;  --size: 1.15rem; --dur: 15s; --delay: -2s;  --sway: 18px;  --color: rgba(255, 158, 199, 0.24); }
+.bg-heart.h2  { left: 12%; --size: 1.75rem; --dur: 18s; --delay: -9s;  --sway: -22px; --color: rgba(255, 59, 141, 0.22); }
+.bg-heart.h3  { left: 20%; --size: 1.05rem; --dur: 13s; --delay: -4s;  --sway: 14px;  --color: rgba(255, 190, 218, 0.22); }
+.bg-heart.h4  { left: 28%; --size: 2.05rem; --dur: 20s; --delay: -13s; --sway: -16px; --color: rgba(225, 29, 100, 0.20); }
+.bg-heart.h5  { left: 36%; --size: 1.3rem;  --dur: 16s; --delay: -6s;  --sway: 20px;  --color: rgba(255, 133, 184, 0.26); }
+.bg-heart.h6  { left: 45%; --size: 1.55rem; --dur: 14s; --delay: -11s; --sway: -20px; --color: rgba(255, 59, 141, 0.20); }
+.bg-heart.h7  { left: 53%; --size: 1.1rem;  --dur: 17s; --delay: -1s;  --sway: 16px;  --color: rgba(255, 179, 211, 0.24); }
+.bg-heart.h8  { left: 61%; --size: 1.9rem;  --dur: 19s; --delay: -8s;  --sway: -18px; --color: rgba(225, 29, 100, 0.22); }
+.bg-heart.h9  { left: 69%; --size: 1.25rem; --dur: 13.5s; --delay: -5s; --sway: 22px; --color: rgba(255, 158, 199, 0.25); }
+.bg-heart.h10 { left: 77%; --size: 1.65rem; --dur: 16.5s; --delay: -14s; --sway: -14px; --color: rgba(255, 59, 141, 0.21); }
+.bg-heart.h11 { left: 84%; --size: 1.1rem;  --dur: 14.5s; --delay: -3s; --sway: 15px;  --color: rgba(255, 190, 218, 0.24); }
+.bg-heart.h12 { left: 91%; --size: 1.85rem; --dur: 18.5s; --delay: -10s; --sway: -20px; --color: rgba(225, 29, 100, 0.21); }
+.bg-heart.h13 { left: 40%; --size: 0.95rem; --dur: 12s; --delay: -7s;  --sway: 12px;  --color: rgba(255, 158, 199, 0.20); }
+.bg-heart.h14 { left: 73%; --size: 1.4rem;  --dur: 15.5s; --delay: -12s; --sway: -16px; --color: rgba(255, 92, 160, 0.22); }
+
+@keyframes floatUp {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.85) rotate(-8deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate3d(var(--sway, 18px), -58vh, 0) scale(1) rotate(8deg);
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(calc(var(--sway, 18px) * -0.5), -118vh, 0) scale(1.08) rotate(-6deg);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Centered Stage & Glowing Kawaii Card
+   ========================================================================== */
+
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+}
+
+.card {
+  position: relative;
+  width: min(90vw, 33rem);
+  padding: clamp(2.1rem, 5vw, 3.4rem) clamp(1.4rem, 4.5vw, 2.8rem);
+  border-radius: 2rem;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-align: center;
+  box-shadow:
+    0 0 28px rgba(255, 59, 141, 0.26),
+    0 0 70px rgba(225, 29, 100, 0.18),
+    inset 0 0 26px rgba(255, 133, 184, 0.1);
+  animation: cardGlowPulse 3.6s ease-in-out infinite;
+}
+
+@keyframes cardGlowPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 26px rgba(255, 59, 141, 0.26),
+      0 0 68px rgba(225, 29, 100, 0.18),
+      inset 0 0 24px rgba(255, 133, 184, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 38px rgba(255, 59, 141, 0.42),
+      0 0 92px rgba(225, 29, 100, 0.28),
+      inset 0 0 32px rgba(255, 158, 199, 0.16);
+  }
+}
+
+[hidden],
+.view[hidden] {
+  display: none !important;
+}
+
+.card-emblem {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+}
+
+.emblem-heart {
+  width: clamp(3rem, 7vw, 4rem);
+  height: clamp(3rem, 7vw, 4rem);
+  filter: drop-shadow(0 0 14px rgba(255, 59, 141, 0.72));
+  animation: heartBeat 2.4s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  16% {
+    transform: scale(1.1);
+  }
+  30% {
+    transform: scale(0.98);
+  }
+  44% {
+    transform: scale(1.07);
+  }
+  65% {
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   Headings — Neon Pink/Rose Glow
+   ========================================================================== */
+
+.question-title,
+.celebration-title {
+  margin: 0 auto;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: #fff5fa;
+  text-wrap: balance;
+}
+
+.question-title {
+  font-size: clamp(2.15rem, 6.2vw, 3.35rem);
+  margin-bottom: clamp(1.8rem, 4.5vw, 2.5rem);
+  text-shadow:
+    0 0 8px rgba(255, 224, 238, 0.85),
+    0 0 20px rgba(255, 77, 151, 0.85),
+    0 0 42px rgba(225, 29, 100, 0.7);
+  animation: neonTextPulse 3s ease-in-out infinite;
+}
+
+.celebration-title {
+  font-size: clamp(1.85rem, 5.2vw, 2.75rem);
+  margin-bottom: 2rem;
+  text-shadow:
+    0 0 10px rgba(255, 229, 241, 0.9),
+    0 0 24px rgba(255, 59, 141, 0.88),
+    0 0 48px rgba(225, 29, 100, 0.78);
+  animation: neonTextPulse 2.6s ease-in-out infinite;
+}
+
+.celebration-title:focus {
+  outline: none;
+}
+
+@keyframes neonTextPulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 8px rgba(255, 224, 238, 0.85),
+      0 0 18px rgba(255, 77, 151, 0.82),
+      0 0 38px rgba(225, 29, 100, 0.65);
+  }
+  50% {
+    text-shadow:
+      0 0 12px rgba(255, 240, 247, 0.95),
+      0 0 28px rgba(255, 77, 151, 0.96),
+      0 0 56px rgba(225, 29, 100, 0.85);
+  }
+}
+
+/* ==========================================================================
+   Buttons — Accessible, High-Contrast, Glowing Kawaii Controls
+   ========================================================================== */
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.9rem, 3vw, 1.5rem);
+}
+
+.no-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7.25rem;
+  min-height: 3.1rem;
+  padding: 0.8rem 2.1rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.18s var(--ease-dodge),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn:focus-visible {
+  outline: 3px solid #ffe4f2;
+  outline-offset: 4px;
+}
+
+/* "Yes" primary glowing CTA */
+.btn-yes {
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 196, 222, 0.72);
+  background: linear-gradient(135deg, #ff4794 0%, #d91656 100%);
+  text-shadow: 0 1px 2px rgba(95, 6, 36, 0.45);
+  box-shadow:
+    0 0 18px rgba(255, 59, 141, 0.65),
+    0 0 38px rgba(217, 22, 86, 0.42);
+  animation: yesButtonPulse 2.8s ease-in-out infinite;
+}
+
+.btn-yes:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 0 24px rgba(255, 92, 160, 0.85),
+    0 0 52px rgba(225, 29, 100, 0.58);
+}
+
+.btn-yes:active {
+  transform: translateY(0) scale(0.97);
+}
+
+@keyframes yesButtonPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 18px rgba(255, 59, 141, 0.62),
+      0 0 36px rgba(217, 22, 86, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 26px rgba(255, 92, 160, 0.85),
+      0 0 50px rgba(225, 29, 100, 0.58);
+  }
+}
+
+/* "No" playful dodging button */
+.btn-no {
+  color: #ffeaf4;
+  border: 1.5px solid rgba(255, 158, 199, 0.65);
+  background: rgba(74, 14, 46, 0.88);
+  box-shadow:
+    0 0 14px rgba(255, 133, 184, 0.34),
+    inset 0 0 12px rgba(255, 133, 184, 0.12);
+  touch-action: none;
+}
+
+/* Fixed-position state once "No" starts dodging around the viewport */
+.btn-no.is-escaped {
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: 0;
+  z-index: 40;
+  will-change: transform;
+  transition:
+    transform 0.38s var(--ease-dodge),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  box-shadow:
+    0 0 20px rgba(255, 92, 160, 0.5),
+    0 8px 24px rgba(14, 3, 9, 0.55);
+}
+
+/* Circular icon-only "Start over" reset button */
+.celebration-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-reset {
+  width: 3.1rem;
+  height: 3.1rem;
+  min-width: 3.1rem;
+  min-height: 3.1rem;
+  padding: 0;
+  border-radius: 50%;
+  color: #ffe8f3;
+  border: 1.5px solid rgba(255, 158, 199, 0.55);
+  background: rgba(255, 59, 141, 0.16);
+  box-shadow: 0 0 18px rgba(255, 59, 141, 0.28);
+}
+
+.reset-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  transition: transform 0.28s var(--ease-dodge);
+}
+
+.btn-reset:hover {
+  background: rgba(255, 59, 141, 0.28);
+  border-color: rgba(255, 196, 222, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 0 26px rgba(255, 59, 141, 0.48);
+}
+
+.btn-reset:hover .reset-icon {
+  transform: rotate(-45deg);
+}
+
+.btn-reset:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* ==========================================================================
+   Celebration Entrance & Heart Burst Effect
+   ========================================================================== */
+
+.celebration-view.is-entering {
+  animation: popIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.84) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.heart-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.burst-heart {
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: var(--b-size, 1.5rem);
+  color: var(--b-color, #ff4d97);
+  text-shadow:
+    0 0 12px rgba(255, 77, 151, 0.85),
+    0 0 24px rgba(225, 29, 100, 0.6);
+  user-select: none;
+  will-change: transform, opacity;
+  animation: heartBurst var(--b-dur, 1.25s) cubic-bezier(0.16, 1, 0.3, 1) var(--b-delay, 0s) forwards;
+}
+
+@keyframes heartBurst {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--sx), var(--sy), 0) scale(0.35) rotate(0deg);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--ex), var(--ey), 0) scale(var(--b-scale, 1.25)) rotate(var(--b-rot, 24deg));
+  }
+}
+
+/* ==========================================================================
+   Top-Right Settings Icon & Language Panel
+   ========================================================================== */
+
+.settings-wrapper {
+  position: fixed;
+  top: clamp(0.9rem, 3vw, 1.5rem);
+  right: clamp(0.9rem, 3vw, 1.5rem);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.settings-btn {
+  width: 3rem;
+  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  border-radius: 50%;
+  color: #ffe8f3;
+  border: 1.5px solid rgba(255, 158, 199, 0.52);
+  background: rgba(34, 8, 24, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 18px rgba(255, 59, 141, 0.3),
+    inset 0 0 10px rgba(255, 133, 184, 0.1);
+}
+
+.settings-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  transition: transform 0.32s var(--ease-dodge);
+}
+
+.settings-btn:hover,
+.settings-btn[aria-expanded="true"] {
+  background: rgba(74, 14, 46, 0.92);
+  border-color: rgba(255, 196, 222, 0.85);
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 24px rgba(255, 59, 141, 0.5),
+    inset 0 0 14px rgba(255, 158, 199, 0.18);
+}
+
+.settings-btn:hover .settings-icon,
+.settings-btn[aria-expanded="true"] .settings-icon {
+  transform: rotate(45deg);
+}
+
+.settings-panel {
+  width: min(17rem, calc(100vw - 2rem));
+  padding: 1.15rem;
+  border-radius: 1.35rem;
+  background: rgba(34, 8, 24, 0.92);
+  border: 1.5px solid var(--card-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 0 28px rgba(255, 59, 141, 0.28),
+    0 14px 36px rgba(10, 2, 7, 0.65),
+    inset 0 0 20px rgba(255, 133, 184, 0.08);
+  transform-origin: top right;
+  animation: panelFadeIn 0.22s var(--ease-dodge) both;
+}
+
+@keyframes panelFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.settings-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff2f8;
+  text-shadow: 0 0 12px rgba(255, 77, 151, 0.6);
+}
+
+.settings-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 158, 199, 0.35);
+  background: rgba(255, 59, 141, 0.12);
+  color: #ffe3f0;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.settings-close-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.settings-close-btn:hover {
+  background: rgba(255, 59, 141, 0.28);
+  border-color: rgba(255, 196, 222, 0.75);
+  transform: scale(1.06);
+}
+
+.settings-close-btn:focus-visible {
+  outline: 3px solid #ffe4f2;
+  outline-offset: 2px;
+}
+
+.settings-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--pink-pastel);
+}
+
+.lang-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 158, 199, 0.26);
+  background: rgba(255, 158, 199, 0.06);
+  color: #ffeaf4;
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.15s ease;
+}
+
+.lang-option:hover {
+  background: rgba(255, 59, 141, 0.18);
+  border-color: rgba(255, 158, 199, 0.58);
+}
+
+.lang-option:focus-visible {
+  outline: 3px solid #ffe4f2;
+  outline-offset: 2px;
+}
+
+.lang-check {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  color: #ffffff;
+  transition: opacity 0.15s ease;
+}
+
+.lang-option.is-active {
+  background: linear-gradient(135deg, rgba(255, 71, 148, 0.45) 0%, rgba(217, 22, 86, 0.55) 100%);
+  border-color: rgba(255, 196, 222, 0.85);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 59, 141, 0.35);
+}
+
+.lang-option.is-active .lang-check {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .card {
+    border-radius: 1.6rem;
+    padding: 1.9rem 1.25rem;
+  }
+
+  .btn {
+    min-width: 6.5rem;
+    padding: 0.75rem 1.75rem;
+  }
+
+  .btn-reset,
+  .settings-btn {
+    min-width: 3rem;
+    padding: 0;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-heart,
+  .card,
+  .emblem-heart,
+  .question-title,
+  .celebration-title,
+  .btn-yes,
+  .settings-panel {
+    animation: none;
+  }
+
+  .bg-heart {
+    opacity: 0.14;
+    transform: translate3d(0, -45vh, 0);
+  }
+
+  .btn,
+  .btn-no.is-escaped,
+  .settings-icon,
+  .reset-icon {
+    transition-duration: 0.01ms;
+  }
+
+  .celebration-view.is-entering {
+    animation: none;
+  }
+
+  .burst-heart {
+    animation: none;
+    display: none;
+  }
+}

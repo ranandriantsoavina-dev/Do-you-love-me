@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kawaii Message</title>
+    <meta
+      name="description"
+      content="A glowing kawaii love message card asking 'Do you love me?' with a playful dodging No button and a heart-burst celebration."
+    />
+    <meta property="og:title" content="Kawaii Message" />
+    <meta
+      property="og:description"
+      content="A glowing kawaii love message card asking 'Do you love me?' with a playful dodging No button and a heart-burst celebration."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Fredoka (cute rounded display) & Quicksand (clean rounded body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Subtle CSS-only floating hearts background layer -->
+    <div class="bg-hearts" aria-hidden="true">
+      <span class="bg-heart h1">&#10084;</span>
+      <span class="bg-heart h2">&#10084;</span>
+      <span class="bg-heart h3">&#10084;</span>
+      <span class="bg-heart h4">&#10084;</span>
+      <span class="bg-heart h5">&#10084;</span>
+      <span class="bg-heart h6">&#10084;</span>
+      <span class="bg-heart h7">&#10084;</span>
+      <span class="bg-heart h8">&#10084;</span>
+      <span class="bg-heart h9">&#10084;</span>
+      <span class="bg-heart h10">&#10084;</span>
+      <span class="bg-heart h11">&#10084;</span>
+      <span class="bg-heart h12">&#10084;</span>
+      <span class="bg-heart h13">&#10084;</span>
+      <span class="bg-heart h14">&#10084;</span>
+    </div>
+
+    <!-- Heart burst particle container for celebration -->
+    <div id="heart-burst" class="heart-burst" aria-hidden="true"></div>
+
+    <!-- Top-right settings trigger and language panel -->
+    <div class="settings-wrapper">
+      <button
+        type="button"
+        id="settings-btn"
+        class="btn settings-btn"
+        aria-label="Settings"
+        title="Settings"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="settings-panel"
+      >
+        <svg
+          class="settings-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="3.2" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"
+          />
+        </svg>
+      </button>
+
+      <section
+        id="settings-panel"
+        class="settings-panel"
+        role="dialog"
+        aria-labelledby="settings-title"
+        hidden
+      >
+        <div class="settings-header">
+          <h2 id="settings-title" class="settings-title">Settings</h2>
+          <button
+            type="button"
+            id="settings-close-btn"
+            class="settings-close-btn"
+            aria-label="Close settings"
+            title="Close settings"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <p id="language-label" class="settings-label">Language</p>
+        <div class="lang-options" role="group" aria-labelledby="language-label">
+          <button type="button" class="lang-option" data-lang="fr" aria-pressed="false">
+            <span class="lang-name">Français</span>
+            <svg
+              class="lang-check"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </button>
+          <button type="button" class="lang-option is-active" data-lang="en" aria-pressed="true">
+            <span class="lang-name">English</span>
+            <svg
+              class="lang-check"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="de" aria-pressed="false">
+            <span class="lang-name">Deutsch</span>
+            <svg
+              class="lang-check"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Centered main stage -->
+    <main class="stage">
+      <section class="card" id="message-card" aria-live="polite">
+        <!-- Question state -->
+        <div id="question-view" class="view question-view">
+          <div class="card-emblem" aria-hidden="true">
+            <svg
+              class="emblem-heart"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M32 56.5C32 56.5 8 41.2 8 22.8C8 14.5 14.4 8.5 22 8.5C26.7 8.5 30.2 10.9 32 14.2C33.8 10.9 37.3 8.5 42 8.5C49.6 8.5 56 14.5 56 22.8C56 41.2 32 56.5 32 56.5Z"
+                fill="url(#kawaiiHeartGrad)"
+                stroke="#ffd6e8"
+                stroke-width="2.5"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient
+                  id="kawaiiHeartGrad"
+                  x1="12"
+                  y1="10"
+                  x2="52"
+                  y2="54"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#ff85b8" />
+                  <stop offset="55%" stop-color="#ff2e83" />
+                  <stop offset="100%" stop-color="#d91656" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <h1 id="question-heading" class="question-title">Do you love me?</h1>
+
+          <div class="button-row" id="button-row">
+            <button type="button" id="yes-btn" class="btn btn-yes">Yes</button>
+            <span class="no-slot" id="no-slot">
+              <button type="button" id="no-btn" class="btn btn-no">No</button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Celebration state (hidden until "Yes" is clicked) -->
+        <div id="celebration-view" class="view celebration-view" hidden>
+          <div class="card-emblem celebration-emblem" aria-hidden="true">
+            <svg
+              class="emblem-heart"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M32 56.5C32 56.5 8 41.2 8 22.8C8 14.5 14.4 8.5 22 8.5C26.7 8.5 30.2 10.9 32 14.2C33.8 10.9 37.3 8.5 42 8.5C49.6 8.5 56 14.5 56 22.8C56 41.2 32 56.5 32 56.5Z"
+                fill="url(#celebrationHeartGrad)"
+                stroke="#ffe6f1"
+                stroke-width="2.5"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient
+                  id="celebrationHeartGrad"
+                  x1="12"
+                  y1="10"
+                  x2="52"
+                  y2="54"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#ffb3d3" />
+                  <stop offset="50%" stop-color="#ff3b8d" />
+                  <stop offset="100%" stop-color="#e11d48" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <h2 id="celebration-heading" class="celebration-title" tabindex="-1">
+            Ohhh! Really? I love you too Babe❤️
+          </h2>
+
+          <div class="celebration-actions">
+            <button
+              type="button"
+              id="reset-btn"
+              class="btn btn-reset"
+              aria-label="Start over"
+              title="Start over"
+            >
+              <svg
+                class="reset-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
